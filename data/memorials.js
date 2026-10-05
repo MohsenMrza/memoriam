@@ -25,10 +25,10 @@ export const memorials = [
     headstoneText: "CAMERAN MIRZA P.ENG.",
     born: "1935",
     died: "2022",
-    photo: null,
-    cemetery: "Add cemetery name", // TODO: edit
+    photo: cameranmirza.png,
+    cemetery: "Pine Ridge Memorial Gardens", 
     section: "A", // TODO: edit
-    plot: "1", // TODO: edit
+    plot: "61", // TODO: edit
     sections: [
       {
         title: "Biography",
@@ -36,22 +36,26 @@ export const memorials = [
       },
       {
         title: "Career",
-        body: "Cameran was a licensed Professional Engineer (P.Eng.). Add details about where he worked and what he built.",
+        body: "Cameran was a licensed Professional Engineer (P.Eng.). He's done extensive work on multiple major highways in Canada (such as the 401 and 407), and was also a lead in designing the Ontario Science Center.",
       },
       {
         title: "Family",
-        body: "Add the names of his spouse, children, grandchildren and other relatives here.",
+        body: "Cameran was married to Rashida Mirza and has two children, Arman and Romana Mirza.",
       },
       {
         title: "Stories",
-        body: "Add a favourite memory or a saying he was known for.",
+        body: "Cameran was an avid golf player, he even wrote and published a book titled The art of Golf in 2019.",
       },
     ],
   },
-
   // ---- Add more people below this line ----
 ];
 
+//{
+  //id: "karamat-khan",
+  //name: "Karamat Khan",
+  //headstoneText: "KARAMAT KHAN",
+  //born: ""
 /* ============================ TEMPLATE (copy me) ============================
 
   {
