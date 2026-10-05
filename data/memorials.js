@@ -49,13 +49,33 @@ export const memorials = [
     ],
   },
   // ---- Add more people below this line ----
-];
+  {
+    id: "mohammadi-begum-khan",
+    name: "Mohammadi Begum Khan",
+    // Name shown on the grave, in case it differs (e.g. includes "P.Eng.")
+    headstoneText: "MOHAMMADI BEGUM KHAN",
+    born: "1930",
+    died: "1999",
+    photo: "/photos/mohammadibkhan.jpg",
+    cemetery: "Pine Ridge Memorial Gardens", 
+    section: "B", 
+    plot: "12", 
+    sections: [
+      {
+        title: "Biography",
+        body: "Mohammadi arrived to Canada in 1952 and was one of the first of the Khan family to settle in Toronto.",
+      },
+      {
+        title: "Family",
+        body: "Mohammadi was married to Atahullah Khan, They had 4 children, Arshad, Osman, Ghosiya, and Ahmedi.",
+      },
+    ],
+  },
 
-//{
-  //id: "karamat-khan",
-  //name: "Karamat Khan",
-  //headstoneText: "KARAMAT KHAN",
-  //born: ""
+
+];
+  
+
 /* ============================ TEMPLATE (copy me) ============================
 
   {
