@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 import { getMemorial } from "@/data/memorials";
 
 // Builds the only knowledge the assistant is allowed to use.
@@ -24,14 +25,6 @@ function localAnswer(m, question) {
   if (/(buried|grave|plot|cemetery|where.*(rest|lie))/.test(q)) {
     return `${first} is buried at ${m.cemetery}, Section ${m.section}, Plot ${m.plot}.`;
   }
-  if (/(who (was|is)|tell me about|summary|summari[sz]e|life)/.test(q)) {
-    const bio = m.sections.find((s) => s.title === "Biography");
-    return `${m.name} (${m.born}–${m.died}). ${bio ? bio.body : ""}`.trim();
-  }
-  if (/(born|birth|when did.*die|died|age|how old)/.test(q)) {
-    return `${m.name} was born in ${m.born} and passed away in ${m.died}.`;
-  }
-
   const keywordMap = {
     Career: /(work|job|career|profession|employ|do for a living)/,
     Family: /(family|wife|husband|married|children|kids|grand|son|daughter|relative)/,
@@ -47,6 +40,14 @@ function localAnswer(m, question) {
       if (section) return section.body;
     }
   }
+  if (/(who (was|is)|tell me about|summary|summari[sz]e|life)/.test(q)) {
+    const bio = m.sections.find((s) => s.title === "Biography");
+    return `${m.name} (${m.born}–${m.died}). ${bio ? bio.body : ""}`.trim();
+  }
+  if (/(born|birth|when did.*die|died|age|how old)/.test(q)) {
+    return `${m.name} was born in ${m.born} and passed away in ${m.died}.`;
+  }
+
   if (/(accomplish|achiev|proud|legacy)/.test(q)) {
     const picks = m.sections.filter((s) =>
       ["Career", "Community Involvement", "Military Service"].includes(s.title)
@@ -109,7 +110,10 @@ export async function POST(req) {
       }
     );
 
-    if (!res.ok) throw new Error(`Gemini ${res.status}`);
+    if (!res.ok) {
+      const detail = await res.text();
+      throw new Error(`Gemini ${res.status}: ${detail.slice(0, 300)}`);
+    }
     const data = await res.json();
     const answer = data.candidates?.[0]?.content?.parts
       ?.map((p) => p.text || "")
@@ -117,8 +121,40 @@ export async function POST(req) {
       .trim();
     if (!answer) throw new Error("Empty answer");
     return NextResponse.json({ answer, mode: "gemini" });
-  } catch {
+  } catch (err) {
+    console.error("Gemini call failed:", err?.message);
     // Network, quota or API trouble at the fair: fall back instead of failing
     return NextResponse.json({ answer: localAnswer(memorial, q), mode: "local" });
+  }
+}
+
+// Visit /api/chat in a browser to check the AI setup (never reveals the key).
+export async function GET() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  if (!apiKey) {
+    return NextResponse.json({
+      keyFound: false,
+      hint: "GEMINI_API_KEY is not visible to this deployment. Check the name, that it is enabled for Production, then redeploy.",
+    });
+  }
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "Say hi" }] }] }),
+      }
+    );
+    const text = await res.text();
+    return NextResponse.json({
+      keyFound: true,
+      model,
+      geminiStatus: res.status,
+      geminiResponse: text.slice(0, 400),
+    });
+  } catch (err) {
+    return NextResponse.json({ keyFound: true, model, error: String(err?.message) });
   }
 }
