@@ -180,40 +180,73 @@ export function matchFromText(ocrText) {
   const tokens = normalize(ocrText)
     .split(" ")
     .filter((t) => t.length > 1);
+
   if (tokens.length === 0) return [];
-  const joined = tokens.join("");
+
+  const joined = tokens.join(" ");
 
   const results = memorials.map((m) => {
-    const nameWords = normalize(m.name)
+    // Use BOTH name and headstone text
+    const searchableText = normalize(
+      `${m.name} ${m.headstoneText || ""}`
+    );
+
+    const nameWords = searchableText
       .split(" ")
       .filter((w) => w.length > 1);
-    if (nameWords.length === 0) return { memorial: m, confidence: 0 };
 
-    // best similarity of each name word against any OCR token
-    const wordScores = nameWords.map((nw) => {
+    let matches = 0;
+    let score = 0;
+
+    for (const nw of nameWords) {
       let best = 0;
-      for (const t of tokens) best = Math.max(best, similarity(nw, t));
-      // also catch a name glued to a neighbour ("CAMERANMIRZA")
-      if (joined.includes(nw)) best = 1;
-      return best;
-    });
 
-    const weakest = Math.min(...wordScores);
-    const avg = wordScores.reduce((a, b) => a + b, 0) / wordScores.length;
+      for (const token of tokens) {
+        best = Math.max(best, similarity(nw, token));
+      }
 
-    // years bonus
-    const years = [m.born, m.died]
-      .map((y) => String(y).match(/\d{4}/)?.[0])
-      .filter(Boolean);
-    const yearHits = years.filter((y) => joined.includes(y)).length;
-    const yearBonus = years.length ? (yearHits / years.length) * 0.15 : 0;
+      if (joined.includes(nw)) {
+        best = 1;
+      }
 
-    // a name word that's barely there means it's probably a different person
-    const confidence = weakest < 0.6 ? avg * 0.5 : Math.min(1, avg * 0.85 + yearBonus);
-    return { memorial: m, confidence };
+      if (best >= 0.7) {
+        matches++;
+      }
+
+      score += best;
+    }
+
+    const avgScore = score / nameWords.length;
+
+    // Check years
+    const years = [
+      String(m.born).match(/\d{4}/)?.[0],
+      String(m.died).match(/\d{4}/)?.[0],
+    ].filter(Boolean);
+
+    let yearHits = 0;
+
+    for (const year of years) {
+      if (joined.includes(year)) {
+        yearHits++;
+      }
+    }
+
+    const yearBonus = yearHits * 0.2;
+
+    let confidence = avgScore + yearBonus;
+
+    confidence = Math.min(confidence, 1);
+
+    return {
+      memorial: m,
+      confidence,
+      matches,
+      yearHits,
+    };
   });
 
   return results
-    .filter((r) => r.confidence >= 0.7)
+    .filter((r) => r.confidence >= 0.45)
     .sort((a, b) => b.confidence - a.confidence);
 }
