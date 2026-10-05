@@ -71,6 +71,67 @@ export const memorials = [
       },
     ],
   },
+  {
+    id: "m-fazaluddin-khan",
+    name: "Fazal Khan",
+    // Name shown on the grave, in case it differs (e.g. includes "P.Eng.")
+    headstoneText: "M. FAZALUDDIN KHAN",
+    born: "1929",
+    died: "2017",
+    photo: "/photos/fazalkhan.jpg",
+    cemetery: "Pine Ridge Memorial Gardens", 
+    section: "A", // TODO: edit
+    plot: "53", // TODO: edit
+    sections: [
+      {
+        title: "Biography",
+        body: "Fazal is remembered with love by his family. This page is a place to keep his story: who he was, what he accomplished, and what he meant to the people around him.",
+      },
+      {
+        title: "Career",
+        body: "Fazal was a licensed Professional Engineer (P.Eng.). He's done extensive work on multiple major highways in Canada (such as the 401 and 407), and was also a lead in designing the Ontario Science Center.",
+      },
+      {
+        title: "Family",
+        body: "Fazal was married to Rashida Mirza and has two children, Arman and Romana Mirza.",
+      },
+      {
+        title: "Stories",
+        body: "Fazal was an avid golf player, he even wrote and published a book titled The art of Golf in 2019.",
+      },
+    ],
+  },
+  {
+    id: "syed-attaullah-khan",
+    name: "Attaullah Khan",
+    // Name shown on the grave, in case it differs (e.g. includes "P.Eng.")
+    headstoneText: "SYED ATTAULLAH KHAN",
+    born: "1925",
+    died: "2016",
+    photo: "/photos/null",
+    cemetery: "Pine Ridge Memorial Gardens", 
+    section: "B", // TODO: edit
+    plot: "13", // TODO: edit
+    sections: [
+      {
+        title: "Biography",
+        body: "Attaullah is remembered with love by his family. This page is a place to keep his story: who he was, what he accomplished, and what he meant to the people around him.",
+      },
+      {
+        title: "Career",
+        body: "Attaullah was a licensed Professional Architect.",
+      },
+      {
+        title: "Family",
+        body: "Attaullah was married to Rawanda and had 2 children, Fahad, and Fatima.",
+      },
+      {
+        title: "Stories",
+        body: "Attaullah made chairs.",
+      },
+    ],
+  },
+  
 
 
 ];
