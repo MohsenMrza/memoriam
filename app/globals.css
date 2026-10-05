@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-forest-900 text-sand-100 font-sans antialiased;
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-forest-700 shadow-card;
+  }
+  .card-sand {
+    @apply rounded-3xl bg-sand-200 text-forest-950 shadow-sandcard;
+  }
+}
