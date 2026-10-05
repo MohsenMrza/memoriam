@@ -71,43 +71,54 @@ export async function POST(req) {
   }
   const q = question.slice(0, 500);
 
-  const apiKey = process.env.OPENAI_API_KEY; // stays on the server
+  const apiKey = process.env.GEMINI_API_KEY; // stays on the server
   if (!apiKey) {
     return NextResponse.json({ answer: localAnswer(memorial, q), mode: "local" });
   }
 
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-        temperature: 0.2,
-        max_tokens: 300,
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are the Memoriam memorial assistant. Answer visitors' questions about one person, warmly and respectfully, using ONLY the memorial information below. " +
-              "If the answer is not in that information, say you don't have that information on the memorial page yet. Never invent facts, dates, names or relatives. Keep answers short.\n\n" +
-              "MEMORIAL INFORMATION:\n" +
-              buildContext(memorial),
-          },
-          { role: "user", content: q },
-        ],
-      }),
-    });
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-    if (!res.ok) throw new Error(`OpenAI ${res.status}`);
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [
+              {
+                text:
+                  "You are the Memoriam memorial assistant. Answer visitors' questions about one person, warmly and respectfully, using ONLY the memorial information below. " +
+                  "If the answer is not in that information, say you don't have that information on the memorial page yet. Never invent facts, dates, names or relatives. Keep answers short.\n\n" +
+                  "MEMORIAL INFORMATION:\n" +
+                  buildContext(memorial),
+              },
+            ],
+          },
+          contents: [{ role: "user", parts: [{ text: q }] }],
+          generationConfig: {
+            temperature: 0.2,
+            // generous on purpose: Gemini's "thinking" tokens count against this limit
+            maxOutputTokens: 1000,
+          },
+        }),
+      }
+    );
+
+    if (!res.ok) throw new Error(`Gemini ${res.status}`);
     const data = await res.json();
-    const answer = data.choices?.[0]?.message?.content?.trim();
+    const answer = data.candidates?.[0]?.content?.parts
+      ?.map((p) => p.text || "")
+      .join("")
+      .trim();
     if (!answer) throw new Error("Empty answer");
-    return NextResponse.json({ answer, mode: "openai" });
+    return NextResponse.json({ answer, mode: "gemini" });
   } catch {
-    // Network or API trouble at the fair: fall back instead of failing
+    // Network, quota or API trouble at the fair: fall back instead of failing
     return NextResponse.json({ answer: localAnswer(memorial, q), mode: "local" });
   }
 }

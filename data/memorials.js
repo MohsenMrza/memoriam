@@ -25,7 +25,7 @@ export const memorials = [
     headstoneText: "CAMERAN MIRZA P.ENG.",
     born: "1935",
     died: "2022",
-    photo: cameranmirza.png,
+    photo: "/photos/cameranmirza.png",
     cemetery: "Pine Ridge Memorial Gardens", 
     section: "A", // TODO: edit
     plot: "61", // TODO: edit
