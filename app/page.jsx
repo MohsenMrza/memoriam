@@ -15,8 +15,8 @@ export default function Home() {
             More than a name and two dates.
           </h1>
           <p className="mt-5 text-lg text-sand-200/90 md:text-xl">
-            Preserve who they were: their stories, their family, their
-            legacy. Search a name, or scan a headstone to open a memorial.
+            Memoriam is a digital memorial platform where you can learn, log, and connect with family 
+            and friends who've passed away.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
