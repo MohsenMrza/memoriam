@@ -108,10 +108,40 @@ export const memorials = [
     headstoneText: "SYED ATTAULLAH KHAN",
     born: "1925",
     died: "2016",
-    photo: "/photos/null",
+    photo: null,
     cemetery: "Pine Ridge Memorial Gardens", 
     section: "B", // TODO: edit
     plot: "13", // TODO: edit
+    sections: [
+      {
+        title: "Biography",
+        body: "Attaullah is remembered with love by his family. This page is a place to keep his story: who he was, what he accomplished, and what he meant to the people around him.",
+      },
+      {
+        title: "Career",
+        body: "Attaullah was a licensed Professional Architect.",
+      },
+      {
+        title: "Family",
+        body: "Attaullah was married to Rawanda and had 2 children, Fahad, and Fatima.",
+      },
+      {
+        title: "Stories",
+        body: "Attaullah made chairs.",
+      },
+    ],
+  },
+  {
+    id: "mukhtar-unissa-begum",
+    name: "Mukhtar Begum",
+    // Name shown on the grave, in case it differs (e.g. includes "P.Eng.")
+    headstoneText: "MUKHTAR UNISSA BEGUM",
+    born: "1927",
+    died: "2021",
+    photo: null,
+    cemetery: "Pine Ridge Memorial Gardens", 
+    section: "c", // TODO: edit
+    plot: "23", // TODO: edit
     sections: [
       {
         title: "Biography",
@@ -137,7 +167,7 @@ export const memorials = [
 ];
   
 
-/* ============================ TEMPLATE (copy me) ============================
+/* ============================ template for future refrence ============================
 
   {
     id: "first-last",
