@@ -1,15 +1,4 @@
 import "./globals.css";
-import { Tinos } from "next/font/google";
-
-// Tinos is a free font that looks identical to Times New Roman. Phones don't
-// ship with Times New Roman, so we load this one for every device.
-const tinos = Tinos({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-tinos",
-});
 
 export const metadata = {
   title: "Memoriam",
@@ -25,7 +14,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={tinos.variable}>
+    <html lang="en">
       <body className="min-h-screen">{children}</body>
     </html>
   );

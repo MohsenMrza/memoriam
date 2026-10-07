@@ -15,8 +15,8 @@ export default function Home() {
             More than a name and two dates.
           </h1>
           <p className="mt-5 text-lg text-sand-200/90 md:text-xl">
-            Preserve who they were: their stories, their family, their
-            legacy. Search a name, or scan a headstone to open a memorial.
+            Memoriam is a digital memorial platform where you can learn, log, and connect with family 
+            and friends who've passed away.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -43,21 +43,12 @@ export default function Home() {
                   href={`/memorial/${m.id}`}
                   className="card flex h-full flex-col items-center p-6 text-center transition hover:-translate-y-1"
                 >
-                  <span className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-sand-200 font-serif text-3xl text-forest-900">
-                    {m.photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={m.photo}
-                        alt={`Portrait of ${m.name}`}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      m.name
-                        .split(" ")
-                        .map((p) => p[0])
-                        .slice(0, 2)
-                        .join("")
-                    )}
+                  <span className="grid h-20 w-20 place-items-center rounded-full bg-sand-200 font-serif text-3xl text-forest-900">
+                    {m.name
+                      .split(" ")
+                      .map((p) => p[0])
+                      .slice(0, 2)
+                      .join("")}
                   </span>
                   <span className="mt-4 font-serif text-xl">{m.name}</span>
                   <span className="mt-1 text-sand-200">

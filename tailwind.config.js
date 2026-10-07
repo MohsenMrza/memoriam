@@ -23,8 +23,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-tinos)", "Times New Roman", "Times", "serif"],
-        sans: ["var(--font-tinos)", "Times New Roman", "Times", "serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
         // The offset "stacked card" look from the mockup
